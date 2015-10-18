@@ -17,7 +17,7 @@ Options:
   let args = docopt(help, version="pocketvm 0.1")
   if args["<file>"]:
     if fileExists($args["<file>"]):
-      let cpu = CPU()
+      var cpu = CPU()
       cpu.load($args["<file>"])
       cpu.start()
     else:

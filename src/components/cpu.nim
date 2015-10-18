@@ -4,7 +4,7 @@ type CPU = object
   registers: array[16, uint32]
   cursor: int
 
-proc load(this: CPU, filename: string): bool {.discardable.} =
+proc load(this: var CPU, filename: string): bool {.discardable.} =
   let file: File = open(filename)
   if file == nil:
     return false
@@ -12,17 +12,20 @@ proc load(this: CPU, filename: string): bool {.discardable.} =
   file.close()
   return true
 
-proc execPrint(this: CPU) =
-  this.cursor.inc()
-  while bufferRead(this.cursor) != 0:
+proc execPrint(this: var CPU) =
+  this.cursor+=1
+  while bufferRead(this.cursor) != char(0):
     write(stdout, bufferRead(this.cursor))
-    this.cursor.inc()
+    this.cursor+=1
 
-proc exec(this: CPU) =
-  case bufferRead(this.cursor):
+proc exec(this: var CPU) =
+  case uint8(bufferRead(this.cursor)):
     of INSTRUCTION_PRINT:
       this.execPrint()
+    else:
+      sleep(0)
 
-proc start(this: CPU) =
+proc start(this: var CPU) =
   while this.cursor < bufferSize():
     this.exec()
+    this.cursor+=1
