@@ -1,6 +1,8 @@
 const
-  #Basic set
+  #Debug
   INSTRUCTION_PRINT*: uint8 = 0x01
+  
+  #Loops
   INSTRUCTION_GOTO*: uint8 = 0x02
   INSTRUCTION_IF_EQ*: uint8 = 0x03
   INSTRUCTION_IF_NE*: uint8 = 0x04
@@ -8,9 +10,16 @@ const
   INSTRUCTION_IF_LW*: uint8 = 0x06
   INSTRUCTION_IF_GE*: uint8 = 0x07
   INSTRUCTION_IF_LE*: uint8 = 0x08
-
-  #Character set
-  INSTRUCTION_CHAR_MOV*: uint8 = 0x30
-  INSTRUCTION_CHAR_ADD*: uint8 = 0x31
-  INSTRUCTION_CHAR_SUB*: uint8 = 0x32
-  INSTRUCTION_CHAR_DIV*: uint8 = 0x33
+  
+  #Operations
+  INSTRUCTION_MOV*: uint8 = 0x30
+  INSTRUCTION_ADD*: uint8 = 0x31
+  INSTRUCTION_SUB*: uint8 = 0x32
+  INSTRUCTION_DIV*: uint8 = 0x33
+  
+  #Binary operations
+  INSTRUCTION_SHIFT_LEFT*: uint8 = 0x40
+  INSTRUCTION_SHIFT_RIGHT*: uint8 = 0x41
+  INSTRUCTION_AND*: uint8 = 0x42
+  INSTRUCTION_OR*: uint8 = 0x43
+  INSTRUCTION_XOR*: uint8 = 0x44

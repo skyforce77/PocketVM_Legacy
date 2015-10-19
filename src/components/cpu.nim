@@ -1,4 +1,4 @@
-import os, strutils, memory, cpu.instructions
+import os, strutils, memory, cpu.instructions, cpu.types
 
 type CPU = object
   registers: array[16, uint32]
@@ -11,15 +11,33 @@ proc load(this: var CPU, filename: string): bool {.discardable.} =
   file.toMemory()
   file.close()
   return true
+  
+proc readByte(this: var CPU): uint8 =
+  var typ: uint8 = uint8(bufferRead(this.cursor))
+  this.cursor+=1
+  return typ
+  
+proc readChar(this: var CPU): char =
+  var typ: char = bufferRead(this.cursor)
+  this.cursor+=1
+  return typ
+  
+proc readString(this: var CPU): string =
+  var str: string = ""
+  while bufferRead(this.cursor) != char(0):
+    str = str&bufferRead(this.cursor)
+    this.cursor+=1
+  return str
 
 proc execPrint(this: var CPU) =
-  this.cursor+=1
-  while bufferRead(this.cursor) != char(0):
-    write(stdout, bufferRead(this.cursor))
-    this.cursor+=1
+  case this.readByte():
+  of TYPE_STRING:
+    write(stdout, this.readString())
+  else:
+    sleep(0)
 
 proc exec(this: var CPU) =
-  case uint8(bufferRead(this.cursor)):
+  case this.readByte():
     of INSTRUCTION_PRINT:
       this.execPrint()
     else:
