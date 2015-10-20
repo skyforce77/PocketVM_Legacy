@@ -39,12 +39,27 @@ proc execPrint(this: var CPU) =
     write(stdout, this.readString())
   of TYPE_BYTE:
     write(stdout, this.readChar())
+  of TYPE_REGISTER:
+    write(stdout, this.registers[int(this.readChar())])
   else: nil
 
-proc execBeep(this: var CPU) =
+proc execBeep(this: var CPU) = #todo
   case this.readByte():
   of TYPE_BYTE:
     write(stdout, this.readString())
+  else: nil
+  
+proc execMove(this: var CPU) =
+  var toMove: uint32 = 0
+  case this.readByte():
+  of TYPE_BYTE:
+    toMove = uint32(this.readByte())
+  of TYPE_REGISTER:
+    toMove = uint32(this.registers[int(this.readByte())])
+  else: nil
+  case this.readByte():
+  of TYPE_REGISTER:
+    this.registers[int(this.readByte())] = toMove
   else: nil
 
 #Instructions slector
@@ -54,11 +69,12 @@ proc exec(this: var CPU) =
       this.execPrint()
     of INSTRUCTION_BEEP:
       this.execBeep()
-    else:
-      sleep(0)
+    of INSTRUCTION_MOVE:
+      this.execMove()
+    else: nil
+  this.cursor+=1
 
 #Start execution
 proc start(this: var CPU) =
   while this.cursor < bufferSize():
     this.exec()
-    this.cursor+=1
