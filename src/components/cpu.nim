@@ -95,6 +95,14 @@ proc execAdd(this: var CPU) = #need to support int and long
   of TYPE_REGISTER:
     this.registers[int(this.readByte())] = arg1+arg2
   else: discard
+  
+proc execSub(this: var CPU) = #need to support int and long
+  let arg1: uint64 = this.readValueForRegister()
+  let arg2: uint64 = this.readValueForRegister()
+  case this.readByte():
+  of TYPE_REGISTER:
+    this.registers[int(this.readByte())] = arg1-arg2
+  else: discard
 
 #Instructions slector
 proc exec(this: var CPU) =
@@ -106,6 +114,8 @@ proc exec(this: var CPU) =
     of INSTRUCTION_MOVE:
       this.execMove()
     of INSTRUCTION_ADD:
+      this.execAdd()
+    of INSTRUCTION_SUB:
       this.execAdd()
     else: discard
 

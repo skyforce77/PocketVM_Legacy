@@ -4,6 +4,8 @@ const
 
   #Registers
   INSTRUCTION_MOVE*: uint8 = 0x10 #Need arg1 (byte/int/long/register) and arg2 register
+  INSTRUCTION_PUSH*: uint8 = 0x11
+  INSTRUCTION_POP*: uint8 = 0x12
 
   #Loops
   INSTRUCTION_GOTO*: uint8 = 0x22
@@ -16,8 +18,9 @@ const
 
   #Operations
   INSTRUCTION_ADD*: uint8 = 0x31 #Need two args (byte/int/long/register) and arg3 register
-  INSTRUCTION_SUB*: uint8 = 0x32
-  INSTRUCTION_DIV*: uint8 = 0x33
+  INSTRUCTION_SUB*: uint8 = 0x32 #Same as above
+  INSTRUCTION_MUL*: uint8 = 0x33
+  INSTRUCTION_DIV*: uint8 = 0x34
 
   #Binary operations
   INSTRUCTION_SHIFT_LEFT*: uint8 = 0x40
