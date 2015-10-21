@@ -95,7 +95,7 @@ proc execAdd(this: var CPU) = #need to support int and long
   of TYPE_REGISTER:
     this.registers[int(this.readByte())] = arg1+arg2
   else: discard
-  
+
 proc execSub(this: var CPU) = #need to support int and long
   let arg1: uint64 = this.readValueForRegister()
   let arg2: uint64 = this.readValueForRegister()
@@ -116,7 +116,7 @@ proc exec(this: var CPU) =
     of INSTRUCTION_ADD:
       this.execAdd()
     of INSTRUCTION_SUB:
-      this.execAdd()
+      this.execSub()
     else: discard
 
 #Start execution
