@@ -70,9 +70,17 @@ proc execPrint(this: var CPU) =
   of TYPE_STRING:
     write(stdout, this.readString())
   of TYPE_BYTE:
-    write(stdout, this.readChar())
+    write(stdout, this.readByte())
   of TYPE_REGISTER:
     write(stdout, this.registers[int(this.readChar())])
+  else: discard
+  
+proc execPutChar(this: var CPU) =
+  case this.readByte():
+  of TYPE_BYTE:
+    write(stdout, this.readChar())
+  of TYPE_REGISTER:
+    write(stdout, char(this.registers[int(this.readChar())]))
   else: discard
 
 proc execBeep(this: var CPU) = #todo
@@ -88,7 +96,7 @@ proc execMove(this: var CPU) = #need to support int and long
     this.registers[int(this.readByte())] = toMove
   else: discard
 
-proc execAdd(this: var CPU) = #need to support int and long
+proc execAdd(this: var CPU) =
   let arg1: uint64 = this.readValueForRegister()
   let arg2: uint64 = this.readValueForRegister()
   case this.readByte():
@@ -96,7 +104,7 @@ proc execAdd(this: var CPU) = #need to support int and long
     this.registers[int(this.readByte())] = arg1+arg2
   else: discard
 
-proc execSub(this: var CPU) = #need to support int and long
+proc execSub(this: var CPU) =
   let arg1: uint64 = this.readValueForRegister()
   let arg2: uint64 = this.readValueForRegister()
   case this.readByte():
@@ -104,19 +112,51 @@ proc execSub(this: var CPU) = #need to support int and long
     this.registers[int(this.readByte())] = arg1-arg2
   else: discard
 
+proc execMul(this: var CPU) =
+  let arg1: uint64 = this.readValueForRegister()
+  let arg2: uint64 = this.readValueForRegister()
+  case this.readByte():
+  of TYPE_REGISTER:
+    this.registers[int(this.readByte())] = arg1*arg2
+  else: discard
+
+proc execDiv(this: var CPU) =
+  let arg1: uint64 = this.readValueForRegister()
+  let arg2: uint64 = this.readValueForRegister()
+  case this.readByte():
+  of TYPE_REGISTER:
+    this.registers[int(this.readByte())] = arg1 div arg2
+  else: discard
+
+proc execMod(this: var CPU) =
+  let arg1: uint64 = this.readValueForRegister()
+  let arg2: uint64 = this.readValueForRegister()
+  case this.readByte():
+  of TYPE_REGISTER:
+    this.registers[int(this.readByte())] = arg1 mod arg2
+  else: discard
+
 #Instructions slector
 proc exec(this: var CPU) =
   case this.readByte():
-    of INSTRUCTION_PRINT:
-      this.execPrint()
-    of INSTRUCTION_BEEP:
-      this.execBeep()
     of INSTRUCTION_MOVE:
       this.execMove()
     of INSTRUCTION_ADD:
       this.execAdd()
     of INSTRUCTION_SUB:
       this.execSub()
+    of INSTRUCTION_MUL:
+      this.execMul()
+    of INSTRUCTION_DIV:
+      this.execDiv()
+    of INSTRUCTION_MOD:
+      this.execMod()
+    of INSTRUCTION_PRINT:
+      this.execPrint()
+    of INSTRUCTION_PUT_CHAR:
+      this.execPutChar()
+    of INSTRUCTION_BEEP:
+      this.execBeep()
     else: discard
 
 #Start execution
