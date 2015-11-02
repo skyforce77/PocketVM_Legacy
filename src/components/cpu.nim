@@ -145,7 +145,54 @@ proc execMod(this: var CPU) =
     this.registers[int(this.readByte())] = arg1 mod arg2
   else: discard
 
-#Instructions slector
+proc execShiftLeft(this: var CPU) =
+  let arg1: uint64 = this.readValueForRegister()
+  let arg2: uint64 = this.readValueForRegister()
+  case this.readByte():
+  of TYPE_REGISTER:
+    this.registers[int(this.readByte())] = arg1 shl arg2
+  else: discard
+
+proc execShiftRight(this: var CPU) =
+  let arg1: uint64 = this.readValueForRegister()
+  let arg2: uint64 = this.readValueForRegister()
+  case this.readByte():
+  of TYPE_REGISTER:
+    this.registers[int(this.readByte())] = arg1 shr arg2
+  else: discard
+
+proc execAnd(this: var CPU) =
+  let arg1: uint64 = this.readValueForRegister()
+  let arg2: uint64 = this.readValueForRegister()
+  case this.readByte():
+  of TYPE_REGISTER:
+    this.registers[int(this.readByte())] = arg1 and arg2
+  else: discard
+
+proc execOr(this: var CPU) =
+  let arg1: uint64 = this.readValueForRegister()
+  let arg2: uint64 = this.readValueForRegister()
+  case this.readByte():
+  of TYPE_REGISTER:
+    this.registers[int(this.readByte())] = arg1 or arg2
+  else: discard
+
+proc execXor(this: var CPU) =
+  let arg1: uint64 = this.readValueForRegister()
+  let arg2: uint64 = this.readValueForRegister()
+  case this.readByte():
+  of TYPE_REGISTER:
+    this.registers[int(this.readByte())] = arg1 xor arg2
+  else: discard
+
+proc execNot(this: var CPU) =
+  let arg1: uint64 = this.readValueForRegister()
+  case this.readByte():
+  of TYPE_REGISTER:
+    this.registers[int(this.readByte())] = not arg1
+  else: discard
+
+#Instructions selector
 proc exec(this: var CPU) =
   case this.readByte():
     of INSTRUCTION_MOVE:
@@ -160,6 +207,18 @@ proc exec(this: var CPU) =
       this.execDiv()
     of INSTRUCTION_MOD:
       this.execMod()
+    of INSTRUCTION_SHIFT_LEFT:
+      this.execShiftLeft()
+    of INSTRUCTION_SHIFT_RIGHT:
+      this.execShiftRight()
+    of INSTRUCTION_AND:
+      this.execAnd()
+    of INSTRUCTION_OR:
+      this.execOr()
+    of INSTRUCTION_XOR:
+      this.execXor()
+    of INSTRUCTION_NOT:
+      this.execNot()
     of INSTRUCTION_PRINT:
       this.execPrint()
     of INSTRUCTION_PUT_CHAR:

@@ -27,12 +27,12 @@ const
   INSTRUCTION_MOD*: uint8 = 0x35 #Too...
 
   #Binary operations
-  #todo all
-  INSTRUCTION_SHIFT_LEFT*: uint8 = 0x40
-  INSTRUCTION_SHIFT_RIGHT*: uint8 = 0x41
-  INSTRUCTION_AND*: uint8 = 0x42
-  INSTRUCTION_OR*: uint8 = 0x43
-  INSTRUCTION_XOR*: uint8 = 0x44
+  INSTRUCTION_SHIFT_LEFT*: uint8 = 0x40 #Need two args (byte/int/long/register) and arg3 register
+  INSTRUCTION_SHIFT_RIGHT*: uint8 = 0x41 #Same as above
+  INSTRUCTION_AND*: uint8 = 0x42 #Same too
+  INSTRUCTION_OR*: uint8 = 0x43 #Too
+  INSTRUCTION_XOR*: uint8 = 0x44 #Too...
+  INSTRUCTION_NOT*: uint8 = 0x45 #Need one arg (byte/int/long/register) and arg2 register
 
   #Debug
   INSTRUCTION_GET_CHAR*: uint8 = 0xfd #Need one register
