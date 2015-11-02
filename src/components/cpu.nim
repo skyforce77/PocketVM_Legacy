@@ -1,5 +1,8 @@
 import os, strutils, unsigned, memory, cpu.instructions, cpu.types
 
+#C import
+proc getchar(): cchar {.importc, header: "<stdio.h>".}
+
 #CPU Object
 type CPU = object
   registers: array[16, uint64]
@@ -83,13 +86,19 @@ proc execPutChar(this: var CPU) =
     write(stdout, char(this.registers[int(this.readChar())]))
   else: discard
 
-proc execBeep(this: var CPU) = #todo
+proc execGetChar(this: var CPU) =
+  case this.readByte():
+  of TYPE_REGISTER:
+    this.registers[int(this.readChar())] = uint64(getchar());
+  else: discard
+
+proc execBeep(this: var CPU) =
   case this.readByte():
   of TYPE_BYTE:
     write(stdout, this.readString())
   else: discard
 
-proc execMove(this: var CPU) = #need to support int and long
+proc execMove(this: var CPU) =
   var toMove: uint64 = this.readValueForRegister()
   case this.readByte():
   of TYPE_REGISTER:
@@ -155,6 +164,8 @@ proc exec(this: var CPU) =
       this.execPrint()
     of INSTRUCTION_PUT_CHAR:
       this.execPutChar()
+    of INSTRUCTION_GET_CHAR:
+      this.execGetChar()
     of INSTRUCTION_BEEP:
       this.execBeep()
     else: discard

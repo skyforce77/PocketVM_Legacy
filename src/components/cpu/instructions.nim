@@ -5,12 +5,12 @@ const
 
   #Registers
   INSTRUCTION_MOVE*: uint8 = 0x10 #Need arg1 (byte/int/long/register) and arg2 register
-  #todo
+  #todo all
   INSTRUCTION_PUSH*: uint8 = 0x11
   INSTRUCTION_POP*: uint8 = 0x12
 
   #Loops
-  #todo
+  #todo all
   INSTRUCTION_GOTO*: uint8 = 0x20
   INSTRUCTION_IF_EQ*: uint8 = 0x21
   INSTRUCTION_IF_NE*: uint8 = 0x22
@@ -27,7 +27,7 @@ const
   INSTRUCTION_MOD*: uint8 = 0x35 #Too...
 
   #Binary operations
-  #todo
+  #todo all
   INSTRUCTION_SHIFT_LEFT*: uint8 = 0x40
   INSTRUCTION_SHIFT_RIGHT*: uint8 = 0x41
   INSTRUCTION_AND*: uint8 = 0x42
@@ -35,6 +35,6 @@ const
   INSTRUCTION_XOR*: uint8 = 0x44
 
   #Debug
-  INSTRUCTION_GET_CHAR*: uint8 = 0xfd #Need one byte or register #todo
-  INSTRUCTION_PUT_CHAR*: uint8 = 0xfe #Need one register
+  INSTRUCTION_GET_CHAR*: uint8 = 0xfd #Need one register
+  INSTRUCTION_PUT_CHAR*: uint8 = 0xfe #Need one byte or register
   INSTRUCTION_PRINT*: uint8 = 0xff #Need one string, byte or register
