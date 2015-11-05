@@ -15,7 +15,7 @@ const
   INSTRUCTION_IF_EQ*: uint8 = 0x21
   INSTRUCTION_IF_NE*: uint8 = 0x22
   INSTRUCTION_IF_GT*: uint8 = 0x23
-  INSTRUCTION_IF_LW*: uint8 = 0x24
+  INSTRUCTION_IF_LT*: uint8 = 0x24
   INSTRUCTION_IF_GE*: uint8 = 0x25
   INSTRUCTION_IF_LE*: uint8 = 0x26
 

@@ -1,4 +1,4 @@
-import os, strutils, unsigned, memory, cpu.instructions, cpu.types
+import os, strutils, unsigned, memory, cpu.instructions, cpu.types, cpu.flags
 
 #C import
 proc getchar(): cchar {.importc, header: "<stdio.h>".}
@@ -6,6 +6,7 @@ proc getchar(): cchar {.importc, header: "<stdio.h>".}
 #CPU Object
 type CPU = object
   registers: array[16, uint64]
+  flags: array[8, bool]
   cursor: int
 
 #Loading CPU
@@ -53,6 +54,13 @@ proc readString(this: var CPU): string =
   this.cursor+=1
   return str
 
+proc readRegister(this: var CPU, id: uint64): uint64 =
+  var intid: int = int(id)
+  if intid >= 0 and intid <= 16:
+    return this.registers[intid]
+  else:
+    return uint64(0)
+
 proc readValueForRegister(this: var CPU): uint64 =
   case this.readByte():
   of TYPE_REGISTER:
@@ -77,7 +85,7 @@ proc execPrint(this: var CPU) =
   of TYPE_REGISTER:
     write(stdout, this.registers[int(this.readChar())])
   else: discard
-  
+
 proc execPutChar(this: var CPU) =
   case this.readByte():
   of TYPE_BYTE:
