@@ -1,0 +1,3 @@
+PRINT "Entrezunelettre:"
+GET_CHAR r0
+PUT_CHAR r0

@@ -54,8 +54,8 @@ proc readString(this: var CPU): string =
   this.cursor+=1
   return str
 
-proc readRegister(this: var CPU, id: uint64): uint64 =
-  var intid: int = int(id)
+proc readRegister(this: var CPU): uint64 =
+  var intid: int = int(this.readByte())
   if intid >= 0 and intid <= 16:
     return this.registers[intid]
   else:
@@ -64,7 +64,7 @@ proc readRegister(this: var CPU, id: uint64): uint64 =
 proc readValueForRegister(this: var CPU): uint64 =
   case this.readByte():
   of TYPE_REGISTER:
-    return this.registers[int(this.readByte())]
+    return this.readRegister()
   of TYPE_BYTE:
     return this.readByte()
   of TYPE_SHORT:
@@ -74,6 +74,13 @@ proc readValueForRegister(this: var CPU): uint64 =
   of TYPE_LONG:
     return this.readLong()
   else: return uint(0)
+
+proc writeRegister(this: var CPU, value: uint64) =
+  var intid: int = int(this.readByte())
+  if intid >= 0 and intid <= 16:
+    this.registers[intid] = value;
+  else:
+    discard
 
 #Instructions
 proc execPrint(this: var CPU) =
@@ -97,7 +104,7 @@ proc execPutChar(this: var CPU) =
 proc execGetChar(this: var CPU) =
   case this.readByte():
   of TYPE_REGISTER:
-    this.registers[int(this.readChar())] = uint64(getchar());
+    this.writeRegister(uint64(getchar()));
   else: discard
 
 proc execBeep(this: var CPU) =
@@ -110,7 +117,7 @@ proc execMove(this: var CPU) =
   var toMove: uint64 = this.readValueForRegister()
   case this.readByte():
   of TYPE_REGISTER:
-    this.registers[int(this.readByte())] = toMove
+    this.writeRegister(toMove)
   else: discard
 
 proc execAdd(this: var CPU) =
@@ -118,7 +125,7 @@ proc execAdd(this: var CPU) =
   let arg2: uint64 = this.readValueForRegister()
   case this.readByte():
   of TYPE_REGISTER:
-    this.registers[int(this.readByte())] = arg1+arg2
+    this.writeRegister(arg1+arg2)
   else: discard
 
 proc execSub(this: var CPU) =
@@ -126,7 +133,7 @@ proc execSub(this: var CPU) =
   let arg2: uint64 = this.readValueForRegister()
   case this.readByte():
   of TYPE_REGISTER:
-    this.registers[int(this.readByte())] = arg1-arg2
+    this.writeRegister(arg1-arg2)
   else: discard
 
 proc execMul(this: var CPU) =
@@ -134,7 +141,7 @@ proc execMul(this: var CPU) =
   let arg2: uint64 = this.readValueForRegister()
   case this.readByte():
   of TYPE_REGISTER:
-    this.registers[int(this.readByte())] = arg1*arg2
+    this.writeRegister(arg1*arg2)
   else: discard
 
 proc execDiv(this: var CPU) =
@@ -142,7 +149,7 @@ proc execDiv(this: var CPU) =
   let arg2: uint64 = this.readValueForRegister()
   case this.readByte():
   of TYPE_REGISTER:
-    this.registers[int(this.readByte())] = arg1 div arg2
+    this.writeRegister(arg1 div arg2)
   else: discard
 
 proc execMod(this: var CPU) =
@@ -150,7 +157,7 @@ proc execMod(this: var CPU) =
   let arg2: uint64 = this.readValueForRegister()
   case this.readByte():
   of TYPE_REGISTER:
-    this.registers[int(this.readByte())] = arg1 mod arg2
+    this.writeRegister(arg1 mod arg2)
   else: discard
 
 proc execShiftLeft(this: var CPU) =
@@ -158,7 +165,7 @@ proc execShiftLeft(this: var CPU) =
   let arg2: uint64 = this.readValueForRegister()
   case this.readByte():
   of TYPE_REGISTER:
-    this.registers[int(this.readByte())] = arg1 shl arg2
+    this.writeRegister(arg1 shl arg2)
   else: discard
 
 proc execShiftRight(this: var CPU) =
@@ -166,7 +173,7 @@ proc execShiftRight(this: var CPU) =
   let arg2: uint64 = this.readValueForRegister()
   case this.readByte():
   of TYPE_REGISTER:
-    this.registers[int(this.readByte())] = arg1 shr arg2
+    this.writeRegister(arg1 shr arg2)
   else: discard
 
 proc execAnd(this: var CPU) =
@@ -174,7 +181,7 @@ proc execAnd(this: var CPU) =
   let arg2: uint64 = this.readValueForRegister()
   case this.readByte():
   of TYPE_REGISTER:
-    this.registers[int(this.readByte())] = arg1 and arg2
+    this.writeRegister(arg1 and arg2)
   else: discard
 
 proc execOr(this: var CPU) =
@@ -182,7 +189,7 @@ proc execOr(this: var CPU) =
   let arg2: uint64 = this.readValueForRegister()
   case this.readByte():
   of TYPE_REGISTER:
-    this.registers[int(this.readByte())] = arg1 or arg2
+    this.writeRegister(arg1 or arg2)
   else: discard
 
 proc execXor(this: var CPU) =
@@ -190,14 +197,14 @@ proc execXor(this: var CPU) =
   let arg2: uint64 = this.readValueForRegister()
   case this.readByte():
   of TYPE_REGISTER:
-    this.registers[int(this.readByte())] = arg1 xor arg2
+    this.writeRegister(arg1 xor arg2)
   else: discard
 
 proc execNot(this: var CPU) =
   let arg1: uint64 = this.readValueForRegister()
   case this.readByte():
   of TYPE_REGISTER:
-    this.registers[int(this.readByte())] = not arg1
+    this.writeRegister(not arg1)
   else: discard
 
 #Instructions selector
