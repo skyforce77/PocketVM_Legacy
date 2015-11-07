@@ -1,3 +1,5 @@
-PRINT "Entrezunelettre:"
+PRINT "Entrez__une__lettre:__"
 GET_CHAR r0
+PRINT "Vous__avez__entré:__"
 PUT_CHAR r0
+PUT_CHAR '\n'
