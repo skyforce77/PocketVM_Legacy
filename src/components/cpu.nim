@@ -7,7 +7,7 @@ proc getchar(): cchar {.importc, header: "<stdio.h>".}
 type CPU = object
   registers: array[16, uint64]
   flags: array[8, bool]
-  cursor: int
+  cursor: int64
 
 #Loading CPU
 proc load(this: var CPU, filename: string): bool {.discardable.} =
@@ -56,7 +56,7 @@ proc readString(this: var CPU): string =
 
 proc readRegister(this: var CPU): uint64 =
   var intid: int = int(this.readByte())
-  if intid >= 0 and intid <= 16:
+  if intid >= 0 and intid <= 15:
     return this.registers[intid]
   else:
     return uint64(0)
@@ -77,7 +77,7 @@ proc readValueForRegister(this: var CPU): uint64 =
 
 proc writeRegister(this: var CPU, value: uint64) =
   var intid: int = int(this.readByte())
-  if intid >= 0 and intid <= 16:
+  if intid >= 0 and intid <= 15:
     this.registers[intid] = value;
   else:
     discard
@@ -90,7 +90,7 @@ proc execPrint(this: var CPU) =
   of TYPE_BYTE:
     write(stdout, this.readByte())
   of TYPE_REGISTER:
-    write(stdout, this.registers[int(this.readChar())])
+    write(stdout, this.readRegister())
   else: discard
 
 proc execPutChar(this: var CPU) =
@@ -98,7 +98,7 @@ proc execPutChar(this: var CPU) =
   of TYPE_BYTE:
     write(stdout, this.readChar())
   of TYPE_REGISTER:
-    write(stdout, char(this.registers[int(this.readChar())]))
+    write(stdout, char(this.readRegister()))
   else: discard
 
 proc execGetChar(this: var CPU) =
@@ -107,11 +107,9 @@ proc execGetChar(this: var CPU) =
     this.writeRegister(uint64(getchar()));
   else: discard
 
-proc execBeep(this: var CPU) =
-  case this.readByte():
-  of TYPE_BYTE:
-    write(stdout, this.readString())
-  else: discard
+proc execJump(this: var CPU) =
+  let pointer: uint64 = this.readValueForRegister()
+  this.cursor = int64(pointer)
 
 proc execMove(this: var CPU) =
   var toMove: uint64 = this.readValueForRegister()
@@ -240,8 +238,8 @@ proc exec(this: var CPU) =
       this.execPutChar()
     of INSTRUCTION_GET_CHAR:
       this.execGetChar()
-    of INSTRUCTION_BEEP:
-      this.execBeep()
+    of INSTRUCTION_JUMP:
+      this.execJump()
     else: discard
 
 #Start execution

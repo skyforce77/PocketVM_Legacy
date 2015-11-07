@@ -1,5 +1,10 @@
-PRINT "Entrez__une__lettre:__"
+:debut
+PRINT "Entrez__des__lettres:\n"
+:retour
+JUMP >unefonction
+
+:unefonction
 GET_CHAR r0
-PRINT "Vous__avez__entré:__"
 PUT_CHAR r0
-PUT_CHAR '\n'
+JUMP >retour
+

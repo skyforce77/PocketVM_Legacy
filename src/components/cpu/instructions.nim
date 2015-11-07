@@ -10,8 +10,8 @@ const
   INSTRUCTION_POP*: uint8 = 0x12
 
   #Loops
+  INSTRUCTION_JUMP*: uint8 = 0x20
   #todo all
-  INSTRUCTION_GOTO*: uint8 = 0x20
   INSTRUCTION_IF_EQ*: uint8 = 0x21
   INSTRUCTION_IF_NE*: uint8 = 0x22
   INSTRUCTION_IF_GT*: uint8 = 0x23
