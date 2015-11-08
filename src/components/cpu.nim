@@ -81,6 +81,10 @@ proc writeRegister(this: var CPU, value: uint64) =
     this.registers[intid] = value;
   else:
     discard
+    
+proc zapBytes(this: var CPU, number: int) =
+  for i in 1..number:
+    discard this.readChar()
 
 #Instructions
 proc execPrint(this: var CPU) =
@@ -205,6 +209,42 @@ proc execNot(this: var CPU) =
     this.writeRegister(not arg1)
   else: discard
 
+proc execIfEQ(this: var CPU) =
+  let arg1: uint64 = this.readValueForRegister()
+  let arg2: uint64 = this.readValueForRegister()
+  if arg1 == arg2:
+    this.zapBytes(9)
+      
+proc execIfNE(this: var CPU) =
+  let arg1: uint64 = this.readValueForRegister()
+  let arg2: uint64 = this.readValueForRegister()
+  if not (arg1 == arg2):
+    this.zapBytes(9)
+
+proc execIfLT(this: var CPU) =
+  let arg1: uint64 = this.readValueForRegister()
+  let arg2: uint64 = this.readValueForRegister()
+  if arg1 < arg2:
+    this.zapBytes(9)
+      
+proc execIfGT(this: var CPU) =
+  let arg1: uint64 = this.readValueForRegister()
+  let arg2: uint64 = this.readValueForRegister()
+  if arg1 > arg2:
+    this.zapBytes(9)
+      
+proc execIfLE(this: var CPU) =
+  let arg1: uint64 = this.readValueForRegister()
+  let arg2: uint64 = this.readValueForRegister()
+  if arg1 <= arg2:
+    this.zapBytes(9)
+      
+proc execIfGE(this: var CPU) =
+  let arg1: uint64 = this.readValueForRegister()
+  let arg2: uint64 = this.readValueForRegister()
+  if arg1 >= arg2:
+    this.zapBytes(9)
+
 #Instructions selector
 proc exec(this: var CPU) =
   case this.readByte():
@@ -240,6 +280,18 @@ proc exec(this: var CPU) =
       this.execGetChar()
     of INSTRUCTION_JUMP:
       this.execJump()
+    of INSTRUCTION_IF_EQ:
+      this.execIfEQ()
+    of INSTRUCTION_IF_NE:
+      this.execIfNE()
+    of INSTRUCTION_IF_LT:
+      this.execIfLT()
+    of INSTRUCTION_IF_GT:
+      this.execIfGT()
+    of INSTRUCTION_IF_LE:
+      this.execIfLE()
+    of INSTRUCTION_IF_GE:
+      this.execIfGE()
     else: discard
 
 #Start execution

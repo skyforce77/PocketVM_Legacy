@@ -17,6 +17,8 @@ proc getTranslation(val: string): uint8 =
     return 0x12
   of "JUMP":
     return 0x20
+  of "ELSE":
+    return 0x20
   of "IF_EQ":
     return 0x21
   of "IF_NE":
