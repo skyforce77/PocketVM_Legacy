@@ -10,14 +10,13 @@ const
   INSTRUCTION_POP*: uint8 = 0x12
 
   #Loops
-  INSTRUCTION_JUMP*: uint8 = 0x20
-  #todo all
-  INSTRUCTION_IF_EQ*: uint8 = 0x21
-  INSTRUCTION_IF_NE*: uint8 = 0x22
-  INSTRUCTION_IF_GT*: uint8 = 0x23
-  INSTRUCTION_IF_LT*: uint8 = 0x24
-  INSTRUCTION_IF_GE*: uint8 = 0x25
-  INSTRUCTION_IF_LE*: uint8 = 0x26
+  INSTRUCTION_JUMP*: uint8 = 0x20 #Need jump value >label
+  INSTRUCTION_IF_EQ*: uint8 = 0x21 #Need two args (byte/int/long/register) and ELSE >endofblock
+  INSTRUCTION_IF_NE*: uint8 = 0x22 #Same
+  INSTRUCTION_IF_GT*: uint8 = 0x23 #Same
+  INSTRUCTION_IF_LT*: uint8 = 0x24 #Same
+  INSTRUCTION_IF_GE*: uint8 = 0x25 #Same
+  INSTRUCTION_IF_LE*: uint8 = 0x26 #Same
 
   #Operations
   INSTRUCTION_ADD*: uint8 = 0x31 #Need two args (byte/int/long/register) and arg3 register
