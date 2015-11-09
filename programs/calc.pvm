@@ -16,7 +16,3 @@ DIV r5 r4 r0
 PUT_CHAR '='
 PRINT r0
 PUT_CHAR '\n'
-
-
-
-
