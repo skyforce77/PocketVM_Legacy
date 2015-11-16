@@ -1,10 +1,20 @@
 include components.cpu, lib.compiler
 
-proc runFile(file: string) =
+proc runFile(file: var string) =
   if fileExists(file):
+    var pvmDir: string = getTempDir()&"pvm";
+    var programDir: string = pvmDir&"/"&file.extractFilename();
+    var code = programDir&"/code.bin";
+    if not pvmDir.dirExists():
+      pvmDir.createDir()
+    if not programDir.dirExists():
+      programDir.createDir()
+    file.copyFile(code)
+    file = code
     var cpu = CPU()
     cpu.load(file)
     cpu.start()
+
   else:
     echo "Could not run: file does not exists"
 
