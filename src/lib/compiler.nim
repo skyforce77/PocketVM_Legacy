@@ -2,6 +2,7 @@ import os, strutils, tables, hashes, math
 
 type Compiler = object
   filename: string
+  tomake: string
   labels: TableRef[string, int64]
   jumps: TableRef[int64, string]
 
@@ -112,8 +113,9 @@ proc run(this: var Compiler): string =
   this.labels = newTable[string, int64]()
   this.jumps = newTable[int64, string]()
   if fileExists(this.filename):
-    var compiled = this.filename.replace(".pvm","")
-    var temp = compiled & ".temp"
+    if this.tomake == nil:
+      this.tomake = this.filename.replace(".pvm","")
+    var temp = this.tomake & ".temp"
     var file = open(this.filename)
     var to = open(temp, mode=fmReadWrite)
     while not file.endOfFile():
@@ -128,12 +130,12 @@ proc run(this: var Compiler): string =
     file.close()
     to.close()
     var starts = open(temp, mode=fmRead)
-    var ends = open(compiled, mode=fmReadWrite)
+    var ends = open(this.tomake, mode=fmReadWrite)
     this.rewriteJumps(starts,ends)
     starts.close()
     ends.close()
     removeFile(temp)
-    return compiled
+    return this.tomake
   else:
     echo "Could not compile: file does not exists"
     quit(QuitFailure)
