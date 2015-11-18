@@ -109,6 +109,25 @@ proc rewriteJumps(this: Compiler, temp: File, file: File) =
     else:
       file.write(temp.readChar())
 
+iterator splitInstruction(s: string): string =
+  var last = 0
+  if len(s) > 0:
+    while last <= len(s):
+      var first = last
+      if s[first] == '"':
+        inc(last)
+        while last < len(s) and s.substr(last, last + <1) != "\"":
+          inc(last)
+        inc(last)
+      else:
+        while last < len(s) and s.substr(last, last + <1) != " ":
+          inc(last)
+      yield substr(s, first, last-1)
+      inc(last, 1)
+
+proc splitInstruction(s: string): seq[string] =
+  accumulateResult(s.splitInstruction())
+
 proc run(this: var Compiler): string =
   this.labels = newTable[string, int64]()
   this.jumps = newTable[int64, string]()
@@ -120,10 +139,9 @@ proc run(this: var Compiler): string =
     var to = open(temp, mode=fmReadWrite)
     while not file.endOfFile():
       var line = file.readLine()
-      var split = line.split(" ")
+      var split = line.splitInstruction()
       for inst in split:
         var vinst = inst.replace("\\n", "\n")
-        vinst = vinst.replace("__", " ")
         if vinst.startsWith("\\"):
           vinst = unescape(inst)
         this.writeTranslated(to, vinst)

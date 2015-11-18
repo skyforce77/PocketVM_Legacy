@@ -1,6 +1,6 @@
 :debut
 
-PRINT "Entrez__des__lettres:\n"
+PRINT "Entrez des lettres:\n"
 MOVE 0x06 r1
 
 :retour
