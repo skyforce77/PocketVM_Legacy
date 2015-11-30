@@ -1,7 +1,8 @@
-import os, strutils, unsigned, memory, cpu.instructions, cpu.types, cpu.flags
+import strutils, memory, cpu.instructions, cpu.vmtypes, cpu.flags
 
 #C import
 proc getchar(): cchar {.importc, header: "<stdio.h>".}
+proc printf(frmt: cstring) {.varargs, importc, header: "<stdio.h>", cdecl.}
 
 #CPU Object
 type CPU = object
@@ -11,11 +12,11 @@ type CPU = object
 
 #Loading CPU
 proc load(this: var CPU, filename: string): bool {.discardable.} =
-  let file: File = open(filename)
-  if file == nil:
-    return false
-  file.toMemory()
-  file.close()
+  #let file: File = open(filename)
+  #if file == nil:
+  #  return false
+  #file.toMemory()
+  #file.close()
   return true
 
 #Read program
@@ -90,19 +91,19 @@ proc zapBytes(this: var CPU, number: int) =
 proc execPrint(this: var CPU) =
   case this.readByte():
   of TYPE_STRING:
-    write(stdout, this.readString())
+    printf("%s", this.readString())
   of TYPE_BYTE:
-    write(stdout, this.readByte())
+    printf("%d", this.readByte())
   of TYPE_REGISTER:
-    write(stdout, this.readRegister())
+    printf("%d", this.readRegister())
   else: discard
 
 proc execPutChar(this: var CPU) =
   case this.readByte():
   of TYPE_BYTE:
-    write(stdout, this.readChar())
+    printf("%c", this.readChar())
   of TYPE_REGISTER:
-    write(stdout, char(this.readRegister()))
+    printf("%c", char(this.readRegister()))
   else: discard
 
 proc execGetChar(this: var CPU) =

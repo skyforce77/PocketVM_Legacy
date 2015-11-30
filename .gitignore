@@ -1,2 +1,4 @@
-nimcache/
-src/pocketvm
+source-nim/nimcache/
+source-nim/pocketvm
+output
+build
