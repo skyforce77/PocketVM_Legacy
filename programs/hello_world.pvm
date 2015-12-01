@@ -1,4 +1,1 @@
-PRINT "Hello__world\n"
-PUSH 'a'
-POP r0
-PUT_CHAR r0
+PRINT "Hello world\n"
