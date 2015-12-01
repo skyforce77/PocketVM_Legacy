@@ -1,0 +1,16 @@
+PUSH '\n'
+PUSH 't'
+PUSH 's'
+PUSH 'e'
+PUSH 't'
+
+MOVE 0x05 r8
+:ret
+IF_NE r8 0x00 ELSE >fin
+POP r1
+PUT_CHAR r1
+SUB r8 0x01 r1
+MOVE r1 r8
+JUMP >ret
+
+:fin
