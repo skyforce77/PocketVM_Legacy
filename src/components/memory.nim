@@ -6,6 +6,9 @@ type Memory = object
     size: int64
     stack: seq[uint64]
 
+proc init*(this: var Memory) =
+    this.stack = newSeq[uint64]()
+
 proc bufferSize*(this: var Memory): int64 = this.size
 proc bufferRead*(this: var Memory, index: int64): char = this.buffer[index]
 
@@ -17,7 +20,7 @@ proc loadCode*(this: var Memory, file: File) =
 proc push*(this: var Memory, value: uint64) =
     this.stack.add(value)
 
-proc pop*(this: var Memory, value: uint64): uint64 =
-    var last = this.stack[this.stack.len()]
-    this.stack.delete(this.stack.len())
+proc pop*(this: var Memory): uint64 =
+    var last = this.stack[this.stack.len()-1]
+    this.stack.delete(this.stack.len()-1)
     return last

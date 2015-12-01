@@ -6,8 +6,10 @@ const
   #Registers
   INSTRUCTION_MOVE*: uint8 = 0x10 #Need arg1 (byte/int/long/register) and arg2 register
   #todo all
-  INSTRUCTION_PUSH*: uint8 = 0x11
-  INSTRUCTION_POP*: uint8 = 0x12
+  INSTRUCTION_PUSH*: uint8 = 0x11 #Need arg1 (byte/int/long/register)
+  INSTRUCTION_POP*: uint8 = 0x12 #Need arg1 register/void
+  INSTRUCTION_STORE*: uint8 = 0x13 #Need arg1 register
+  INSTRUCTION_LOAD*: uint8 = 0x14 #Need arg1 register
 
   #Loops
   INSTRUCTION_JUMP*: uint8 = 0x20 #Need jump value >label

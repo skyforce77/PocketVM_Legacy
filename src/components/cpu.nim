@@ -1,10 +1,12 @@
-import os, strutils, unsigned, memory, cpu.instructions, cpu.types, cpu.flags
+import os, strutils, unsigned, cpu.instructions, cpu.types, cpu.flags
+include memory
 
 #C import
 proc getchar(): cchar {.importc, header: "<stdio.h>".}
 
 #CPU Object
 type CPU = object
+  memory: Memory
   registers: array[16, uint64]
   flags: array[8, bool]
   cursor: int64
@@ -14,18 +16,20 @@ proc load(this: var CPU, filename: string): bool {.discardable.} =
   let file: File = open(filename)
   if file == nil:
     return false
-  file.toMemory()
+  this.memory = Memory()
+  this.memory.init();
+  this.memory.loadCode(file)
   file.close()
   return true
 
 #Read program
 proc readByte(this: var CPU): uint8 =
-  var typ: uint8 = uint8(bufferRead(this.cursor))
+  var typ: uint8 = uint8(this.memory.bufferRead(this.cursor))
   this.cursor+=1
   return typ
 
 proc readChar(this: var CPU): char =
-  var typ: char = bufferRead(this.cursor)
+  var typ: char = this.memory.bufferRead(this.cursor)
   this.cursor+=1
   return typ
 
@@ -48,8 +52,8 @@ proc readLong(this: var CPU): uint64 =
 
 proc readString(this: var CPU): string =
   var str: string = ""
-  while bufferRead(this.cursor) != char(0):
-    str = str&bufferRead(this.cursor)
+  while this.memory.bufferRead(this.cursor) != char(0):
+    str = str&this.memory.bufferRead(this.cursor)
     this.cursor+=1
   this.cursor+=1
   return str
@@ -121,6 +125,14 @@ proc execMove(this: var CPU) =
   of TYPE_REGISTER:
     this.writeRegister(toMove)
   else: discard
+
+proc execPush(this: var CPU) =
+  var toPush: uint64 = this.readValueForRegister()
+  this.memory.push(toPush);
+
+proc execPop(this: var CPU) =
+  discard this.readByte()
+  this.writeRegister(this.memory.pop());
 
 proc execAdd(this: var CPU) =
   let arg1: uint64 = this.readValueForRegister()
@@ -250,6 +262,10 @@ proc exec(this: var CPU) =
   case this.readByte():
     of INSTRUCTION_MOVE:
       this.execMove()
+    of INSTRUCTION_PUSH:
+      this.execPush()
+    of INSTRUCTION_POP:
+      this.execPop()
     of INSTRUCTION_ADD:
       this.execAdd()
     of INSTRUCTION_SUB:
@@ -296,5 +312,5 @@ proc exec(this: var CPU) =
 
 #Start execution
 proc start(this: var CPU) =
-  while this.cursor < bufferSize():
+  while this.cursor < this.memory.bufferSize():
     this.exec()

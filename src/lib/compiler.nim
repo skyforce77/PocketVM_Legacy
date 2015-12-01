@@ -16,6 +16,10 @@ proc getTranslation(val: string): uint8 =
     return 0x11
   of "POP":
     return 0x12
+  of "STORE":
+    return 0x13
+  of "LOAD":
+    return 0x14
   of "JUMP":
     return 0x20
   of "ELSE":
