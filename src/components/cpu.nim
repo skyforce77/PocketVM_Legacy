@@ -1,4 +1,4 @@
-import os, strutils, unsigned, cpu.instructions, cpu.types, cpu.flags
+import os, strutils, cpu.instructions, cpu.types, cpu.flags
 include memory
 
 #C import
@@ -134,6 +134,16 @@ proc execPop(this: var CPU) =
   discard this.readByte()
   this.writeRegister(this.memory.pop());
 
+proc execStore(this: var CPU) =
+  var id: uint64 = this.readValueForRegister()
+  var value: uint64 = this.readValueForRegister()
+  this.memory.store(id, value);
+
+proc execLoad(this: var CPU) =
+  var id: uint64 = this.readValueForRegister()
+  discard this.readByte()
+  this.writeRegister(this.memory.load(id));
+
 proc execAdd(this: var CPU) =
   let arg1: uint64 = this.readValueForRegister()
   let arg2: uint64 = this.readValueForRegister()
@@ -266,6 +276,10 @@ proc exec(this: var CPU) =
       this.execPush()
     of INSTRUCTION_POP:
       this.execPop()
+    of INSTRUCTION_STORE:
+      this.execStore()
+    of INSTRUCTION_LOAD:
+      this.execLoad()
     of INSTRUCTION_ADD:
       this.execAdd()
     of INSTRUCTION_SUB:

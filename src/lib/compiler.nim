@@ -68,6 +68,10 @@ proc getTranslation(val: string): uint8 =
     echo "Unknown code: ",val
     return 0x00
 
+proc writeNBytes(to: File, n: int, value: uint64) =
+  for i in countdown(n-1,0):
+    to.write(char(value shr uint64(8*i)))
+
 proc writeTranslated(this: Compiler, to: File, val: var string) =
   if val.startsWith("r"):
     val.delete(first=0, last=0)
@@ -84,7 +88,16 @@ proc writeTranslated(this: Compiler, to: File, val: var string) =
     val.delete(first=val.len-1, last=val.len-1)
     to.write('\3')
     to.write(val[0])
-  elif val.startsWith("0x"):
+  elif val.startsWith("0x") and val.len() == 16+2:
+    to.write('\6')
+    to.writeNBytes(8, uint64(parseHexInt(val)))
+  elif val.startsWith("0x") and val.len() == 8+2:
+    to.write('\5')
+    to.writeNBytes(4, uint64(parseHexInt(val)))
+  elif val.startsWith("0x") and val.len() == 4+2:
+    to.write('\4')
+    to.writeNBytes(2, uint64(parseHexInt(val)))
+  elif val.startsWith("0x") and val.len() == 2+2:
     to.write('\3')
     to.write(char(parseHexInt(val)))
   elif val.startsWith(":"):

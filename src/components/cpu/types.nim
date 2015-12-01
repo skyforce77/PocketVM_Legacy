@@ -5,5 +5,3 @@ const
   TYPE_SHORT*: uint8 = 0x04
   TYPE_INT*: uint8 = 0x05
   TYPE_LONG*: uint8 = 0x06
-  TYPE_BOOL*: uint8 = 0x07 #TODO
-  TYPE_VOID*: uint8 = 0xFF #TODO
