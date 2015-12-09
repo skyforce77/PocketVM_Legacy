@@ -58,6 +58,14 @@ IF_EQ r0 '-' ELSE >func_execprogram_dec_val
 PRINT "VALUE-\n"
 :func_execprogram_dec_val
 
+IF_EQ r0 '.' ELSE >func_execprogram_write_val
+PRINT "WRITE\n"
+:func_execprogram_write_val
+
+IF_EQ r0 ',' ELSE >func_execprogram_read_val
+PRINT "READ\n"
+:func_execprogram_read_val
+
 JUMP >func_execprogram
 :func_execprogram_al
 POP r15
