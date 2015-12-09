@@ -1,0 +1,47 @@
+:start
+//Size
+MOVE 0x00 r8
+//Actual
+MOVE 0x00 r9
+
+//Call func readprogram
+PUSH >funccall_00
+JUMP >func_readprogram
+:funccall_00
+
+//Call func execprogram
+PUSH >funccall_01
+JUMP >func_execprogram
+:funccall_01
+
+JUMP >end
+
+//functions
+
+//function readprogram
+:func_readprogram
+GET_CHAR r0
+STORE r8 r0
+ADD r8 0x01 r7
+MOVE r7 r8
+IF_NE r0 '\n' ELSE >func_readprogram_al
+JUMP >func_readprogram
+:func_readprogram_al
+POP r15
+JUMP r15
+
+//function execprogram
+:func_execprogram
+LOAD r9 r0
+ADD r9 0x01 r1
+MOVE r1 r9
+IF_NE r9 r8 ELSE >func_execprogram_al
+//TODO interpret
+PUT_CHAR r0
+JUMP >func_execprogram
+:func_execprogram_al
+POP r15
+JUMP r15
+
+:end
+PRINT "Finished.\n"
