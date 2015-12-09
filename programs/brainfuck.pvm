@@ -9,6 +9,11 @@ PUSH >funccall_00
 JUMP >func_readprogram
 :funccall_00
 
+//Brainfuck cursor
+MOVE r8 r10
+//Brainfuck memory
+ADD r10 0x01 r11
+
 //Call func execprogram
 PUSH >funccall_01
 JUMP >func_execprogram
@@ -36,8 +41,23 @@ LOAD r9 r0
 ADD r9 0x01 r1
 MOVE r1 r9
 IF_NE r9 r8 ELSE >func_execprogram_al
-//TODO interpret
-PUT_CHAR r0
+
+IF_EQ r0 '>' ELSE >func_execprogram_inc_cursor
+PRINT "CURSOR+\n"
+:func_execprogram_inc_cursor
+
+IF_EQ r0 '<' ELSE >func_execprogram_dec_cursor
+PRINT "CURSOR-\n"
+:func_execprogram_dec_cursor
+
+IF_EQ r0 '+' ELSE >func_execprogram_inc_val
+PRINT "VALUE+\n"
+:func_execprogram_inc_val
+
+IF_EQ r0 '-' ELSE >func_execprogram_dec_val
+PRINT "VALUE-\n"
+:func_execprogram_dec_val
+
 JUMP >func_execprogram
 :func_execprogram_al
 POP r15
