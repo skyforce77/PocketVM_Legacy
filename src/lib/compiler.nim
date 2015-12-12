@@ -119,7 +119,7 @@ proc writeTranslated(this: Compiler, to: File, val: var string) =
 proc rewriteJumps(this: Compiler, temp: File, file: File) =
   while not temp.endOfFile():
     if this.jumps.hasKey(file.getFileSize()):
-      let index: int64 = this.labels.mget(this.jumps.mget(key=file.getFileSize()))
+      let index: int64 = this.labels.mgetOrPut(this.jumps.mgetOrPut(key=file.getFileSize(),""),0)
       for i in countdown(7,0):
         file.write(char(index shr int64(8*i)))
         discard temp.readChar()
@@ -156,12 +156,14 @@ proc run(this: var Compiler): string =
     var to = open(temp, mode=fmReadWrite)
     while not file.endOfFile():
       var line = file.readLine()
-      var split = line.splitInstruction()
-      for inst in split:
-        var vinst = inst.replace("\\n", "\n")
-        if vinst.startsWith("\\"):
-          vinst = unescape(inst)
-        this.writeTranslated(to, vinst)
+      if not line.startsWith("//"):
+        line = line.strip(leading=true, trailing=false)
+        var split = line.splitInstruction()
+        for inst in split:
+          var vinst = inst.replace("\\n", "\n")
+          if vinst.startsWith("\\"):
+            vinst = unescape(inst)
+          this.writeTranslated(to, vinst)
     file.close()
     to.close()
     var starts = open(temp, mode=fmRead)
