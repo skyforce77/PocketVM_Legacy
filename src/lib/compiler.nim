@@ -119,9 +119,9 @@ proc writeTranslated(this: Compiler, to: File, val: var string) =
 proc rewriteJumps(this: Compiler, temp: File, file: File) =
   while not temp.endOfFile():
     if this.jumps.hasKey(file.getFileSize()):
-      let index: int64 = this.labels.mgetOrPut(this.jumps.mgetOrPut(key=file.getFileSize(),""),0)
+      let index: uint64 = uint64(this.labels.mgetOrPut(this.jumps.mgetOrPut(key=file.getFileSize(),""),0))
       for i in countdown(7,0):
-        file.write(char(index shr int64(8*i)))
+        file.write(char(index shr uint64(8*i)))
         discard temp.readChar()
     else:
       file.write(temp.readChar())
