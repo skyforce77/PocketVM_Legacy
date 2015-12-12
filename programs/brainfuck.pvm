@@ -11,8 +11,6 @@ JUMP >func_readprogram
 
 //Brainfuck cursor
 MOVE r8 r10
-//Brainfuck memory
-ADD r10 0x01 r11
 
 //Call func execprogram
 PUSH >funccall_01
@@ -43,28 +41,49 @@ MOVE r1 r9
 IF_NE r9 r8 ELSE >func_execprogram_al
 
 IF_EQ r0 '>' ELSE >func_execprogram_inc_cursor
-PRINT "CURSOR+\n"
+ADD r10 0x01 r1
+MOVE r1 r10
 :func_execprogram_inc_cursor
 
 IF_EQ r0 '<' ELSE >func_execprogram_dec_cursor
-PRINT "CURSOR-\n"
+SUB r10 0x01 r1
+MOVE r1 r10
 :func_execprogram_dec_cursor
 
 IF_EQ r0 '+' ELSE >func_execprogram_inc_val
-PRINT "VALUE+\n"
+LOAD r10 r1
+ADD r1 0x01 r2
+STORE r10 r2
 :func_execprogram_inc_val
 
 IF_EQ r0 '-' ELSE >func_execprogram_dec_val
-PRINT "VALUE-\n"
+LOAD r10 r1
+SUB r1 0x01 r2
+STORE r10 r2
 :func_execprogram_dec_val
 
 IF_EQ r0 '.' ELSE >func_execprogram_write_val
-PRINT "WRITE\n"
+LOAD r10 r1
+PUT_CHAR r1
 :func_execprogram_write_val
 
 IF_EQ r0 ',' ELSE >func_execprogram_read_val
-PRINT "READ\n"
+GET_CHAR r1
+STORE r10 r1
 :func_execprogram_read_val
+
+IF_EQ r0 '[' ELSE >func_execprogram_start_loop
+PUSH r9
+:func_execprogram_start_loop
+
+IF_EQ r0 ']' ELSE >func_execprogram_end_loop
+LOAD r10 r1
+IF_NE r1 0x00 ELSE >func_execprogram_end_loop_not_zero
+POP r9
+JUMP >func_execprogram_end_loop
+:func_execprogram_end_loop_not_zero
+POP r1
+:func_execprogram_end_loop
 
 JUMP >func_execprogram
 :func_execprogram_al
