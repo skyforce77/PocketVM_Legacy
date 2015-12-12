@@ -1,20 +1,12 @@
 :debut
 
 PRINT "Entrez des lettres:\n"
-MOVE 0x06 r1
 
 :retour
-SUB r1 0x01 r2
-MOVE r2 r1
-IF_NE r1 0x00 ELSE >endif
-JUMP >unefonction
-:endif
-
-JUMP >fin
-
-:unefonction
-GET_CHAR r15
-PUT_CHAR r15
-JUMP >retour
-
+GET_CHAR r1
+IF_NE r1 '\n' ELSE >fin
+	PUT_CHAR r1
+	JUMP >retour
 :fin
+
+PUT_CHAR '\n'

@@ -1,4 +1,4 @@
-import os, strutils, sequtils, unsigned, tables
+import os, strutils, sequtils, tables
 
 const BUFFER_SIZE = 4096
 
@@ -34,5 +34,5 @@ proc store*(this: var Memory, id: uint64, value: uint64) =
 proc load*(this: var Memory, id: uint64): uint64 =
     var value: uint64 = 0
     if this.heap.hasKey(int64(id)):
-      value = uint64(this.heap.mget(int64(id)))
+      value = uint64(this.heap.mgetOrPut(int64(id),0))
     return value

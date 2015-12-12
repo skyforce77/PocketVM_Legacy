@@ -1,0 +1,3 @@
+STORE 0xf000 0xffffffff
+LOAD 0xf000 r0
+PRINT r0
