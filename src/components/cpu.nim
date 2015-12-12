@@ -1,4 +1,4 @@
-import os, strutils, cpu.instructions, cpu.types, cpu.flags
+import os, strutils, cpu.instructions, cpu.types
 include memory
 
 #C import

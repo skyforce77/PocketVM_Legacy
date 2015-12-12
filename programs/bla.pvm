@@ -1,0 +1,9 @@
+MOVE 0xff r0
+:bla
+IF_NE r0 0x00 ELSE >end
+SUB r0 0x01 r1
+MOVE r1 r0
+PRINT r1
+PRINT ":bla\n"
+JUMP >bla
+:end
