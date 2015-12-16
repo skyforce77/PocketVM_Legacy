@@ -35,6 +35,8 @@ proc pop*(this: var Memory): uint64 =
     return uint64(0)
 
 proc store*(this: var Memory, id: uint64, value: uint64) =
+  if this.heap.contains(id):
+    this.heap.del(id)
   this.heap.add(key=id, val=value)
 
 proc load*(this: var Memory, id: uint64): uint64 =
