@@ -7,7 +7,8 @@
 STORE 0x00 0x00
 
 // int limit = 67108864;
-STORE 0x01 0x04000000
+// real benchmark STORE 0x01 0x04000000
+STORE 0x01 0x00000040
 
 // for (int n = 0; n <= limit; n++) {
 // 	if (isPrime(n))
@@ -17,15 +18,15 @@ MOVE 0x00 r1
 LOAD 0x01 r2
 :before_for
 IF_LE r1 r2 ELSE >after_for
-  PUSH >after_isprime_call
   JUMP >func_isprime
   :after_isprime_call
 
-  IF_EQ r1 0x00 ELSE >after_check_bool
+  IF_EQ r14 0x00 ELSE >after_check_bool
     LOAD 0x00 r3
     ADD r3 0x01 r4
     STORE 0x00 r4
   :after_check_bool
+  ADD r1 0x01 r1
 JUMP >before_for
 :after_for
 
@@ -35,30 +36,49 @@ LOAD 0x01 r1
 PRINT r1
 PRINT ") = "
 LOAD 0x00 r1
+PRINT r1
 PRINT "\n"
 
-JUMP >fin
+JUMP >end
 
 // Function isPrime
 :func_isprime
-// temp
-  MOVE 0x00 r1
-// TODO
+
 // if (n < 2)
 //    return 0;
+  IF_LT r1 0x02 ELSE >after_lt_2
+    MOVE 0x00 r14
+    JUMP >after_isprime_call
+  :after_lt_2
+
 // else if (n == 2)
 //    return 1;
+  IF_EQ r1 0x02 ELSE >after_eq_2
+    MOVE 0x01 r14
+    JUMP >after_isprime_call
+  :after_eq_2
+
 // else if (n % 2 == 0)
 //    return 0;
+  MOD r1 0x02 r14
+  IF_EQ r14 0x00 ELSE >after_mod_2
+    MOVE 0x00 r14
+    JUMP >after_isprime_call
+  :after_mod_2
+
 // int upperLimit = sqrt(n);
+// TODO
+
 // int i = 3;
 // while (i <= upperLimit) {
 //    if (n % i == 0)
 //        return 0;
 //    i += 2;
 //}
+// TODO
+
 //return 1;
-  POP r15
-JUMP r15
+  MOVE 0x01 r14
+JUMP >after_isprime_call
 
 :end
