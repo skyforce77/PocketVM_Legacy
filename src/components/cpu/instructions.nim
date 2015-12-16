@@ -11,7 +11,7 @@ const
   INSTRUCTION_LOAD*: uint8 = 0x14 #Need arg1 register
 
   #Loops
-  INSTRUCTION_JUMP*: uint8 = 0x20 #Need jump value >label
+  INSTRUCTION_JUMP*: uint8 = 0x20 #Need arg1 (byte/int/long/register)  jump value >label
   INSTRUCTION_IF_EQ*: uint8 = 0x21 #Need two args (byte/int/long/register) and ELSE >endofblock
   INSTRUCTION_IF_NE*: uint8 = 0x22 #Same
   INSTRUCTION_IF_GT*: uint8 = 0x23 #Same
@@ -37,4 +37,4 @@ const
   #Debug
   INSTRUCTION_GET_CHAR*: uint8 = 0xfd #Need one register
   INSTRUCTION_PUT_CHAR*: uint8 = 0xfe #Need one byte or register
-  INSTRUCTION_PRINT*: uint8 = 0xff #Need one string, byte, short, int, long or register
+  INSTRUCTION_PRINT*: uint8 = 0xff #Need one arg (string/byte/short/int/long/register)
