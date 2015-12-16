@@ -37,4 +37,4 @@ const
   #Debug
   INSTRUCTION_GET_CHAR*: uint8 = 0xfd #Need one register
   INSTRUCTION_PUT_CHAR*: uint8 = 0xfe #Need one byte or register
-  INSTRUCTION_PRINT*: uint8 = 0xff #Need one string, byte or register
+  INSTRUCTION_PRINT*: uint8 = 0xff #Need one string, byte, short, int, long or register
