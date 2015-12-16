@@ -1,16 +1,19 @@
-import os, strutils, sequtils, tables
+import os, strutils, sequtils, tables, hashes
 
 const BUFFER_SIZE = 4096
+
+proc hash*(x: uint64): Hash {.inline.} =
+  result = toU32(int64(x))
 
 type Memory = object
   buffer: array[BUFFER_SIZE, char]
   size: int64
   stack: seq[uint64]
-  heap: TableRef[int64, int64]
+  heap: TableRef[uint64, uint64]
 
 proc init*(this: var Memory) =
   this.stack = newSeq[uint64]()
-  this.heap = newTable[int64, int64]()
+  this.heap = newTable[uint64, uint64]()
 
 proc bufferSize*(this: var Memory): int64 = this.size
 proc bufferRead*(this: var Memory, index: int64): char = this.buffer[index]
@@ -32,10 +35,10 @@ proc pop*(this: var Memory): uint64 =
     return uint64(0)
 
 proc store*(this: var Memory, id: uint64, value: uint64) =
-  this.heap.add(key=int64(id), val=int64(value))
+  this.heap.add(key=id, val=value)
 
 proc load*(this: var Memory, id: uint64): uint64 =
   var value: uint64 = 0
-  if this.heap.hasKey(int64(id)):
-    value = uint64(this.heap.mgetOrPut(int64(id),0))
+  if this.heap.hasKey(id):
+    value = this.heap.mgetOrPut(id,0)
   return value
