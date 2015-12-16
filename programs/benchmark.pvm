@@ -6,9 +6,8 @@
 // int noPrimes = 0;
 STORE 0x00 0x00
 
-// int limit = 67108864;
-// real benchmark STORE 0x01 0x04000000
-STORE 0x01 0x00000040
+// int limit = 16777216;
+STORE 0x01 0x01000000
 
 // for (int n = 0; n <= limit; n++) {
 // 	if (isPrime(n))
