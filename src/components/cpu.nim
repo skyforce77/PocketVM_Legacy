@@ -1,5 +1,5 @@
 import os, strutils, cpu.instructions, cpu.types
-include memory
+include memory, gpu
 
 #C import
 proc getchar(): cchar {.importc, header: "<stdio.h>".}
@@ -7,6 +7,7 @@ proc getchar(): cchar {.importc, header: "<stdio.h>".}
 #CPU Object
 type CPU = object
   memory: Memory
+  gpu: GPU
   registers: array[16, uint64]
   flags: array[8, bool]
   cursor: int64
@@ -19,6 +20,7 @@ proc load(this: var CPU, filename: string): bool {.discardable.} =
   this.memory = Memory()
   this.memory.init();
   this.memory.loadCode(file)
+  this.gpu = GPU()
   file.close()
   return true
 
@@ -267,6 +269,9 @@ proc execIfGE(this: var CPU) =
   if arg1 >= arg2:
     this.zapBytes(9)
 
+proc execSwapBuffers(this: var CPU) =
+  this.gpu.swapBuffers();
+
 #Instructions selector
 proc exec(this: var CPU) =
   case this.readByte():
@@ -322,6 +327,8 @@ proc exec(this: var CPU) =
       this.execIfLE()
     of INSTRUCTION_IF_GE:
       this.execIfGE()
+    of INSTRUCTION_SWAP_BUFFERS:
+      this.execSwapBuffers();
     else: discard
 
 #Start execution

@@ -34,6 +34,9 @@ const
   INSTRUCTION_XOR*: uint8 = 0x44 #Too...
   INSTRUCTION_NOT*: uint8 = 0x45 #Need one arg (byte/int/long/register) and arg2 register
 
+  #GPU operations
+  INSTRUCTION_SWAP_BUFFERS*: uint8 = 0x50 #Without argument
+
   #Debug
   INSTRUCTION_GET_CHAR*: uint8 = 0xfd #Need one register
   INSTRUCTION_PUT_CHAR*: uint8 = 0xfe #Need one byte or register

@@ -64,6 +64,8 @@ proc getTranslation(val: string): uint8 =
     return 0xfe
   of "PRINT":
     return 0xff
+  of "SWAP_SCREEN":
+    return 0x50
   else:
     echo "Unknown code: ",val
     return 0x00
