@@ -272,6 +272,12 @@ proc execIfGE(this: var CPU) =
 proc execSwapBuffers(this: var CPU) =
   this.gpu.swapBuffers();
 
+proc execWrite(this: var CPU) =
+  let arg1: uint64 = this.readValueForRegister()
+  let arg2: uint64 = this.readValueForRegister()
+  let arg3: uint64 = this.readValueForRegister()
+  this.gpu.write(arg1,arg2,arg3);
+
 #Instructions selector
 proc exec(this: var CPU) =
   case this.readByte():
@@ -328,7 +334,9 @@ proc exec(this: var CPU) =
     of INSTRUCTION_IF_GE:
       this.execIfGE()
     of INSTRUCTION_SWAP_BUFFERS:
-      this.execSwapBuffers();
+      this.execSwapBuffers()
+    of INSTRUCTION_WRITE:
+      this.execWrite()
     else: discard
 
 #Start execution

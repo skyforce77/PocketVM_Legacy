@@ -25,8 +25,7 @@ JUMP >end
 :func_readprogram
 GET_CHAR r0
 STORE r8 r0
-ADD r8 0x01 r7
-MOVE r7 r8
+ADD r8 0x01 r8
 IF_NE r0 '\n' ELSE >func_readprogram_al
   JUMP >func_readprogram
 :func_readprogram_al
@@ -36,30 +35,27 @@ JUMP r15
 //function execprogram
 :func_execprogram
 LOAD r9 r0
-ADD r9 0x01 r1
-MOVE r1 r9
+ADD r9 0x01 r9
 IF_NE r9 r8 ELSE >func_execprogram_al
 
   IF_EQ r0 '>' ELSE >func_execprogram_inc_cursor
-    ADD r10 0x01 r1
-    MOVE r1 r10
+    ADD r10 0x01 r10
   :func_execprogram_inc_cursor
 
   IF_EQ r0 '<' ELSE >func_execprogram_dec_cursor
-    SUB r10 0x01 r1
-    MOVE r1 r10
+    SUB r10 0x01 r10
   :func_execprogram_dec_cursor
 
   IF_EQ r0 '+' ELSE >func_execprogram_inc_val
     LOAD r10 r1
-    ADD r1 0x01 r2
-    STORE r10 r2
+    ADD r1 0x01 r1
+    STORE r10 r1
   :func_execprogram_inc_val
 
   IF_EQ r0 '-' ELSE >func_execprogram_dec_val
     LOAD r10 r1
-    SUB r1 0x01 r2
-    STORE r10 r2
+    SUB r1 0x01 r1
+    STORE r10 r1
   :func_execprogram_dec_val
 
   IF_EQ r0 '.' ELSE >func_execprogram_write_val

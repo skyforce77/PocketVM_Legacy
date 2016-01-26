@@ -36,6 +36,7 @@ const
 
   #GPU operations
   INSTRUCTION_SWAP_BUFFERS*: uint8 = 0x50 #Without argument
+  INSTRUCTION_WRITE*: uint8 = 0x51 #Arg1 pixel x, arg2 pixel y, arg3 color (int)
 
   #Debug
   INSTRUCTION_GET_CHAR*: uint8 = 0xfd #Need one register
