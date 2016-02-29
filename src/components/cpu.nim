@@ -12,20 +12,15 @@ type CPU = object
   flags: array[8, bool]
   cursor: int64
 
-proc init*(this: var CPU): bool {.discardable.} =
-  this.gpu = GPU()
-  this.gpu.init()
-
-#Loading program
-proc load*(this: var CPU, filename: string): bool {.discardable.} =
+#Loading CPU
+proc load(this: var CPU, filename: string): bool {.discardable.} =
   let file: File = open(filename)
   if file == nil:
     return false
   this.memory = Memory()
-  this.memory.init()
+  this.memory.init();
   this.memory.loadCode(file)
   this.gpu = GPU()
-  this.gpu.init()
   file.close()
   return true
 

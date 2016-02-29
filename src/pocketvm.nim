@@ -12,7 +12,6 @@ proc runFile(file: var string) =
     file.copyFile(code)
     file = code
     var cpu = CPU()
-    cpu.init()
     cpu.load(file)
     cpu.start()
 
