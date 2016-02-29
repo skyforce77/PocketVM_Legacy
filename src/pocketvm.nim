@@ -1,4 +1,4 @@
-include components.cpu, lib.compiler
+include components.cpu, lib.compiler, lib.vmevents
 
 proc runFile(file: var string) =
   if fileExists(file):
@@ -11,6 +11,13 @@ proc runFile(file: var string) =
       programDir.createDir()
     file.copyFile(code)
     file = code
+
+    # Emit VM_EVENT_INIT
+    var args = StatusEventArgs()
+    args.status = 0;
+    VmEventEmitter.emit(VM_INIT_EVENT, args)
+
+    # Start CPU
     var cpu = CPU()
     cpu.load(file)
     cpu.start()

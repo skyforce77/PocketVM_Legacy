@@ -12,5 +12,4 @@ IF_NE r8 0x00 ELSE >fin
   SUB r8 0x01 r1
   MOVE r1 r8
   JUMP >ret
-
 :fin
