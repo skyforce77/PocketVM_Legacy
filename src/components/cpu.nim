@@ -1,4 +1,4 @@
-import os, strutils, cpu.instructions, cpu.types
+import os, strutils, cpu.instructions, cpu.types, "../lib/vmattributes"
 include memory, gpu
 
 #C import
@@ -93,6 +93,25 @@ proc zapBytes(this: var CPU, number: int) =
     discard this.readChar()
 
 #Instructions
+proc execVMId(this: var CPU) =
+  case this.readByte():
+  of TYPE_REGISTER:
+    this.writeRegister(VM_ID)
+  else: discard
+
+proc execVMVersion(this: var CPU) =
+  case this.readByte():
+  of TYPE_REGISTER:
+    this.writeRegister(VM_VERSION)
+  else: discard
+
+proc execVMCheckVersion(this: var CPU) =
+  var min: uint64 = this.readValueForRegister()
+  var max: uint64 = this.readValueForRegister()
+  if (not (min == 0) and min > VM_VERSION) or (not (max == 0) and max < VM_VERSION):
+    stderr.writeln "This program is not compatible with your PocketVM version. You are running PocketVM API ",VM_VERSION,"\nNeeded to run: ",max," > VERSION > ",min
+    quit(0)
+
 proc execPrint(this: var CPU) =
   case this.readByte():
   of TYPE_STRING:
@@ -269,10 +288,10 @@ proc execIfGE(this: var CPU) =
   if arg1 >= arg2:
     this.zapBytes(9)
 
-proc execSwapBuffers(this: var CPU) =
+proc execGpuSwapBuffers(this: var CPU) =
   this.gpu.swapBuffers();
 
-proc execWrite(this: var CPU) =
+proc execGpuWrite(this: var CPU) =
   let arg1: uint64 = this.readValueForRegister()
   let arg2: uint64 = this.readValueForRegister()
   let arg3: uint64 = this.readValueForRegister()
@@ -333,10 +352,16 @@ proc exec(this: var CPU) =
       this.execIfLE()
     of INSTRUCTION_IF_GE:
       this.execIfGE()
-    of INSTRUCTION_SWAP_BUFFERS:
-      this.execSwapBuffers()
-    of INSTRUCTION_WRITE:
-      this.execWrite()
+    of INSTRUCTION_GPU_SWAP_BUFFERS:
+      this.execGpuSwapBuffers()
+    of INSTRUCTION_GPU_WRITE:
+      this.execGpuWrite()
+    of INSTRUCTION_VM_ID:
+      this.execVMId()
+    of INSTRUCTION_VM_VERSION:
+      this.execVMVersion()
+    of INSTRUCTION_VM_CHECK_VERSION:
+      this.execVMCheckVersion()
     else: discard
 
 #Start execution

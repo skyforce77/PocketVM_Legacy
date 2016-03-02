@@ -1,6 +1,5 @@
 const
   #VM
-  #todo
   INSTRUCTION_VM_ID*: uint8 = 0x01 #Need arg1 register
   INSTRUCTION_VM_VERSION*: uint8 = 0x02 #Need arg1 register
   INSTRUCTION_VM_CHECK_VERSION*: uint8 = 0x03 #Need arg1 min, arg2 max (0 to bypass check: VM_CHECK_VERSION 0x01 0x00 will check >= 1)
@@ -43,6 +42,8 @@ const
   INSTRUCTION_GPU_COLOR*: uint8 = 0x52 #Arg1 byte red, arg2 byte green, arg3 byte blue OR arg1 int color
   INSTRUCTION_GPU_WRITE*: uint8 = 0x53 #Arg1 pixel x, arg2 y
   INSTRUCTION_GPU_DRAW_LINE*: uint8 = 0x54 #Arg1 ax, arg2 ay, arg3 bx, arg4 by
+  INSTRUCTION_GPU_DRAW_RECT*: uint8 = 0x55 #Arg1 ax, arg2 ay, arg3 bx, arg4 by
+  INSTRUCTION_GPU_FILL_RECT*: uint8 = 0x56 #Arg1 ax, arg2 ay, arg3 bx, arg4 by
 
   #Debug
   INSTRUCTION_GET_CHAR*: uint8 = 0xfd #Need one register

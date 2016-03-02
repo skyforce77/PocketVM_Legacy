@@ -1,0 +1,11 @@
+VM_ID r1
+PRINT "PocketVM ID: "
+PRINT r1
+PRINT "\n"
+VM_VERSION r2
+PRINT "PocketVM API Version: "
+PRINT r2
+PRINT "\nThen error...\n\n"
+VM_CHECK_VERSION 0xffffffff 0x00
+//This will not run
+PRINT "I like train"

@@ -8,8 +8,12 @@ type Compiler = object
 
 proc getTranslation(val: string): uint8 =
   case val:
-  of "BEEP":
+  of "VM_ID":
     return 0x01
+  of "VM_VERSION":
+    return 0x02
+  of "VM_CHECK_VERSION":
+    return 0x03
   of "MOVE":
     return 0x10
   of "PUSH":
@@ -58,14 +62,14 @@ proc getTranslation(val: string): uint8 =
     return 0x44
   of "NOT":
     return 0x45
+  of "GPU_SWAP_BUFFERS":
+    return 0x50
   of "GET_CHAR":
     return 0xfd
   of "PUT_CHAR":
     return 0xfe
   of "PRINT":
     return 0xff
-  of "SWAP_SCREEN":
-    return 0x50
   else:
     echo "Unknown code: ",val
     return 0x00
