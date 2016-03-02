@@ -1,7 +1,9 @@
 const
-  #Basic set
+  #VM
   #todo
-  INSTRUCTION_BEEP*: uint8 = 0x01 #Need two byte
+  INSTRUCTION_VM_ID*: uint8 = 0x01 #Need arg1 register
+  INSTRUCTION_VM_VERSION*: uint8 = 0x02 #Need arg1 register
+  INSTRUCTION_VM_CHECK_VERSION*: uint8 = 0x03 #Need arg1 min, arg2 max (0 to bypass check: VM_CHECK_VERSION 0x01 0x00 will check >= 1)
 
   #Registers
   INSTRUCTION_MOVE*: uint8 = 0x10 #Need arg1 (byte/int/long/register) and arg2 register
@@ -35,8 +37,12 @@ const
   INSTRUCTION_NOT*: uint8 = 0x45 #Need one arg (byte/int/long/register) and arg2 register
 
   #GPU operations
-  INSTRUCTION_SWAP_BUFFERS*: uint8 = 0x50 #Without argument
-  INSTRUCTION_WRITE*: uint8 = 0x51 #Arg1 pixel x, arg2 pixel y, arg3 color (int)
+  INSTRUCTION_GPU_SWAP_BUFFERS*: uint8 = 0x50 #Without argument
+  #todo
+  INSTRUCTION_GPU_CLEAR*: uint8 = 0x51 #No args
+  INSTRUCTION_GPU_COLOR*: uint8 = 0x52 #Arg1 byte red, arg2 byte green, arg3 byte blue OR arg1 int color
+  INSTRUCTION_GPU_WRITE*: uint8 = 0x53 #Arg1 pixel x, arg2 y
+  INSTRUCTION_GPU_DRAW_LINE*: uint8 = 0x54 #Arg1 ax, arg2 ay, arg3 bx, arg4 by
 
   #Debug
   INSTRUCTION_GET_CHAR*: uint8 = 0xfd #Need one register

@@ -1,5 +1,4 @@
-import iup, events
-include "../lib/vmevents"
+import iup, events, "../lib/vmevents"
 
 const
   SCREEN_SIZE = 288000 # 400*240*3 (colors)
