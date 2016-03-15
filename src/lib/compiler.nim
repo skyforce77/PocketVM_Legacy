@@ -62,8 +62,16 @@ proc getTranslation(val: string): uint8 =
     return 0x44
   of "NOT":
     return 0x45
-  of "GPU_SWAP_BUFFERS":
+  of "GPU_SWAP":
     return 0x50
+  of "GPU_CLEAR":
+    return 0x51
+  of "GPU_COLOR":
+    return 0x52
+  of "GPU_WRITE":
+    return 0x53
+  of "GPU_DRAW_LINE":
+    return 0x54
   of "GET_CHAR":
     return 0xfd
   of "PUT_CHAR":

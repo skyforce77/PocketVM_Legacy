@@ -1,0 +1,4 @@
+:start
+    STORE 0x00 0x00
+
+:end
