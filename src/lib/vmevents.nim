@@ -1,4 +1,4 @@
-import events
+import events, locks
 
 const
   VM_INIT_EVENT*: string = "POCKETVM_INIT_EVENT" # Status args (0+ -> 0:Success, +:Something gone wrong)
@@ -8,4 +8,8 @@ type
   StatusEventArgs* = object of EventArgs
     status*: int
 
-var VmEventEmitter*: EventEmitter = initEventEmitter()
+var VmEventEmitter* = initEventEmitter()
+var VmEventEmitterPtr*: ptr EventEmitter = addr VmEventEmitter
+
+proc emitVmEvent*(event: string, args: EventArgs) =
+  VmEventEmitterPtr[].emit(event, args)

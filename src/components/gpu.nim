@@ -12,7 +12,7 @@ type GPU = object
   reference: uint64
   color: uint64
 
-proc swapBuffers*(this: var GPU) =
+proc swapBuffers*(this: var GPU) {.gcsafe.} =
   if this.reference == 0:
     this.reference = REFERENCE_BUFFER2
   else:
@@ -21,7 +21,7 @@ proc swapBuffers*(this: var GPU) =
   # Emit VM_GPU_SWAP_EVENT
   var args = StatusEventArgs()
   args.status = int(this.reference == 0);
-  VmEventEmitter.emit(VM_GPU_SWAP_EVENT, args)
+  emitVmEvent(VM_GPU_SWAP_EVENT, args)
 
 proc write*(this: var GPU, x: uint64, y: uint64, color: uint64) =
   let refer: uint64 = this.reference+x*(240*3)+y*3

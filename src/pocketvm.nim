@@ -15,7 +15,7 @@ proc runFile(file: var string) =
     # Emit VM_EVENT_INIT
     var args = StatusEventArgs()
     args.status = 0;
-    VmEventEmitter.emit(VM_INIT_EVENT, args)
+    emitVmEvent(VM_INIT_EVENT, args)
 
     # Start CPU
     var cpu = CPU()

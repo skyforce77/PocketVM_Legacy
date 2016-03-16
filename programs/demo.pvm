@@ -1,0 +1,56 @@
+VM_CHECK_VERSION 0x00 0x01
+VM_VERSION r0
+PRINT "Running under PocketVM API "
+PRINT r0
+PRINT "\n\n"
+
+//Size
+MOVE 0x02 r15
+
+//Max x/y
+MOVE r15 r1
+MUL r1 0x04 r12
+
+//Print first line
+MOVE r12 r0
+:back_1
+IF_GE r0 0x01 ELSE >endif_1
+  PUT_CHAR '-'
+  SUB r0 0x01 r1
+  MOVE r1 r0
+  JUMP >back_1
+:endif_1
+PUT_CHAR '\n'
+
+//Actual line y
+MOVE 0x01 r14
+//Actual line x
+MOVE 0x00 r13
+
+//Print mid lines
+:back_2
+IF_NE r14 r12 ELSE >endif_2
+  PUT_CHAR '|'
+  MOD r14 0x02 r0
+  MOVE ' ' r1
+  IF_EQ r0 0x00 ELSE >endif_2_1
+    MOVE '-' r1
+  :endif_2_1
+  PRINT r1
+  PRINT "|\n"
+  ADD r14 0x01 r0
+  MOVE r0 r14
+  MOVE 0x00 r13
+  JUMP >back_2
+:endif_2
+
+//Print last line
+MOVE r12 r0
+:back_3
+IF_GE r0 0x01 ELSE >endif_3
+  PUT_CHAR '-'
+  SUB r0 0x01 r1
+  MOVE r1 r0
+  JUMP >back_3
+:endif_3
+PUT_CHAR '\n'
