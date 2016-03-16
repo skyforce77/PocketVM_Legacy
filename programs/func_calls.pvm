@@ -1,0 +1,42 @@
+VM_CHECK_VERSION 0x00 0x01
+MOVE 0x00 r15
+
+:retour
+
+PRINT "Votre nombre est "
+PRINT r15
+PUT_CHAR '\n'
+
+PRINT "Entrez une fonction à executer:\n"
+PRINT "  1 - addition\n"
+PRINT "  2 - soustraction\n"
+PRINT "  3 - multiplication\n"
+PRINT "  4 - division\n"
+
+GET_CHAR r0
+GET_CHAR r2
+
+PRINT "\nEntrez un chiffre: "
+GET_CHAR r1
+GET_CHAR r2
+
+:debut_if
+IF_EQ r0 '1' ELSE >fin_if
+	PUSH >ret_1
+	JUMP >func_add
+	:ret_1
+	JUMP >fin_if
+:fin_if
+
+
+
+JUMP >retour
+
+
+//Fonction add
+:func_add
+SUB r1 0x30 r1
+ADD r15 r1 r2
+MOVE r2 r15
+POP r14
+JUMP r14
