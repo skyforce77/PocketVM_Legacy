@@ -1,6 +1,6 @@
 include components.cpu, lib.compiler, lib.vmevents
 
-proc runFile(file: var string) =
+proc runFile*(file: var string) =
   if fileExists(file):
     var pvmDir: string = getTempDir()&"pvm";
     var programDir: string = pvmDir&"/"&file.extractFilename();
