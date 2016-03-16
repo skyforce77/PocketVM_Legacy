@@ -294,11 +294,17 @@ proc execGpuSwapBuffers(this: var CPU) =
 proc execGpuClear(this: var CPU) =
   this.gpu.clear()
 
-proc execGpuColor(this: var CPU) =
-  let arg1: uint64 = this.readValueForRegister()
-  let arg2: uint64 = this.readValueForRegister()
-  let arg3: uint64 = this.readValueForRegister()
-  this.gpu.color()
+#proc execGpuColor(this: var CPU) =
+#  case this.readByte():
+#  of TYPE_BYTE:
+#    let arg1: uint8 = this.readByte()
+#    let arg2: uint8 = uint8(this.readValueForRegister())
+#    let arg3: uint8 = uint8(this.readValueForRegister())
+#    this.gpu.color(arg1, arg2, arg3)
+#  of TYPE_INT:
+#    let arg1: uint64 = this.readInt()
+#    this.gpu.color(arg1)
+#  else: discard
 
 proc execGpuWrite(this: var CPU) =
   let arg1: uint64 = this.readValueForRegister()
@@ -307,10 +313,11 @@ proc execGpuWrite(this: var CPU) =
   this.gpu.write(arg1,arg2,arg3)
 
 proc execGpuDrawLine(this: var CPU) =
-  let arg1: uint64 = this.readValueForRegister()
-  let arg2: uint64 = this.readValueForRegister()
-  let arg3: uint64 = this.readValueForRegister()
-  this.gpu.drawLine();
+  var arg1: uint64 = this.readValueForRegister()
+  var arg2: uint64 = this.readValueForRegister()
+  var arg3: uint64 = this.readValueForRegister()
+  var arg4: uint64 = this.readValueForRegister()
+  this.gpu.drawLine(arg1, arg2, arg3, arg4)
 
 #Instructions selector
 proc exec(this: var CPU) =
@@ -371,8 +378,8 @@ proc exec(this: var CPU) =
       this.execGpuSwapBuffers()
     of INSTRUCTION_GPU_CLEAR:
       this.execGpuClear()
-    of INSTRUCTION_GPU_COLOR:
-      this.execGpuColor()
+    #of INSTRUCTION_GPU_COLOR:
+    #  this.execGpuColor()
     of INSTRUCTION_GPU_DRAW_LINE:
       this.execGpuDrawLine()
     of INSTRUCTION_GPU_WRITE:
