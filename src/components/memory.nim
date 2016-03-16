@@ -27,12 +27,12 @@ proc push*(this: var Memory, value: uint64) =
   this.stack.add(value)
 
 proc pop*(this: var Memory): uint64 =
-  if not this.stack.len() == 0:
+  if this.stack.len() == 0:
+    return uint64(0)
+  else:
     var last = this.stack[this.stack.len()-1]
     this.stack.delete(this.stack.len()-1)
     return last
-  else:
-    return uint64(0)
 
 proc store*(this: var Memory, id: uint64, value: uint64) =
   if this.heap.contains(id):
